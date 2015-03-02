@@ -41,6 +41,9 @@ public:
 	UINT_PTR m_spinTimer;
 	afx_msg void OnStepSpin();
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
-//	CGrCamera m_camera;
+	CGrCamera m_camera;
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 };
 
