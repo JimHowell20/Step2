@@ -5,6 +5,8 @@
 
 #pragma once
 #include "graphics/OpenGLWnd.h"
+#include "graphics/GrTexture.h"
+#include "graphics/GrCamera.h"
 
 // CChildView window
 
@@ -33,5 +35,12 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	void OnGLDraw(CDC* pDC);
+	void CChildView::Box(GLdouble p_x, GLdouble p_y, GLdouble p_z, const GLdouble *p_color);
+	CGrTexture m_wood;
+	double m_spinAngle;
+	UINT_PTR m_spinTimer;
+	afx_msg void OnStepSpin();
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
+//	CGrCamera m_camera;
 };
 
