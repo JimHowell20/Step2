@@ -18,6 +18,7 @@ public:
 	void AddTriangleVertex(int v, int n, int t);
 	void CMesh::AddFlatQuad(int a, int b, int c, int d, int n);
 	void CMesh::AddQuad(int a, int b, int c, int d);
+	void CMesh::LoadOBJ(const char *filename);
 
 private:
 	std::vector<CGrVector> m_vertices;

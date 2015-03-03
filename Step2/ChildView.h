@@ -43,6 +43,7 @@ public:
 	double m_spinAngle;
 	CMesh m_mesh;
 	CMesh m_surface;
+	CMesh m_fish;
 	UINT_PTR m_spinTimer;
 	CSphere m_sphere;
 	afx_msg void OnStepSpin();

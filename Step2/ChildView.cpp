@@ -126,6 +126,7 @@ void CChildView::CreateMesh()
 			m_surface.AddQuad(a, b, c, d);
 		}
 	}
+	m_fish.LoadOBJ("models\\fish4.obj");
 }
 
 
@@ -194,6 +195,7 @@ void CChildView::OnGLDraw(CDC* pDC)
 		glRotated(m_spinAngle / 3, 0, 1, 0);
 
 		glPushMatrix();
+		m_fish.Draw();
 		glTranslated(0, 4, 0);
 		m_mesh.Draw();
 		glPopMatrix();
