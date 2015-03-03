@@ -25,6 +25,7 @@ m_spinTimer = 0;
 m_camera.Set(20, 10, 50, 0, 0, 0, 0, 1, 0);
 m_scene = -1;
 m_sphere.SetTexture(&m_worldmap);
+CreateMesh();
 }
 
 CChildView::~CChildView()
@@ -41,6 +42,7 @@ BEGIN_MESSAGE_MAP(CChildView, COpenGLWnd)
 	ON_WM_RBUTTONDOWN()
 	ON_COMMAND(ID_STEP_SPHERE, &CChildView::OnStepSphere)
 	ON_COMMAND(ID_STEP_SQUARE, &CChildView::OnStepSquare)
+	ON_COMMAND(ID_STEP_MESH, &CChildView::OnStepMesh)
 END_MESSAGE_MAP()
 
 
@@ -58,6 +60,72 @@ BOOL CChildView::PreCreateWindow(CREATESTRUCT& cs)
 		::LoadCursor(NULL, IDC_ARROW), reinterpret_cast<HBRUSH>(COLOR_WINDOW+1), NULL);
 
 	return TRUE;
+}
+
+void CChildView::CreateMesh()
+{
+	double v[8][4] = { { 0, 0, 2, 1 }, { 2, 0, 2, 1 }, { 2, 2, 2, 1 }, { 0, 2, 2, 1 },
+	{ 0, 0, 0, 1 }, { 2, 0, 0, 1 }, { 2, 2, 0, 1 }, { 0, 2, 0, 1 } };
+	double n[6][4] = { { 0, 0, 1, 0 }, { 1, 0, 0, 0 }, { 0, 0, -1, 0 },
+	{ -1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, -1, 0, 0 } };
+
+	for (int i = 0; i<8; i++)
+		m_mesh.AddVertex(v[i]);
+
+	for (int i = 0; i<6; i++)
+		m_mesh.AddNormal(n[i]);
+
+	m_mesh.AddFlatQuad(0, 1, 2, 3, 0);
+	m_mesh.AddFlatQuad(1, 5, 6, 2, 1);
+	m_mesh.AddFlatQuad(5, 4, 7, 6, 2);
+	m_mesh.AddFlatQuad(4, 0, 3, 7, 3);
+	m_mesh.AddFlatQuad(3, 2, 6, 7, 4);
+	m_mesh.AddFlatQuad(0, 4, 5, 1, 5);
+
+	//
+	// Create a surface
+	//
+
+	double wid = 20;        // 20 units wide
+	double dep = 20;        // 20 units deep
+	int nW = 15;            // Number of quads across
+	int nD = 15;            // Number of quads deep
+	const double PI = 3.141592653;
+
+	// Create the vertices and -temporary- normals
+	// Note that the surface is nW+1 by nD+1 vertices
+	for (int j = 0; j <= nD; j++)
+	{
+		for (int i = 0; i <= nW; i++)
+		{
+			double x = double(i) / double(nW) * wid - wid / 2;
+			double z = double(j) / double(nD) * dep - dep / 2;
+			double y = sin(double(i) / double(nW) * 4 * PI) +
+				sin(double(j) / double(nD) * 3 * PI);
+
+			CGrVector normal(-4 * PI / wid * cos(double(i) / double(nW) * 4 * PI),
+				1., -3 * PI / dep * cos(double(j) / double(nD) * 3 * PI));
+			normal.Normalize();
+
+
+			m_surface.AddVertex(CGrVector(x, y, z, 1));
+			m_surface.AddNormal(normal);
+		}
+	}
+
+	// Create the quadrilaterals
+	for (int j = 0; j<nD; j++)
+	{
+		for (int i = 0; i<nW; i++)
+		{
+			int a = j * (nW + 1) + i;
+			int b = a + nW + 1;
+			int c = b + 1;
+			int d = a + 1;
+
+			m_surface.AddQuad(a, b, c, d);
+		}
+	}
 }
 
 
@@ -120,6 +188,19 @@ void CChildView::OnGLDraw(CDC* pDC)
 	switch (m_scene) {
 	case ID_STEP_SPHERE:
 		m_sphere.Draw();
+		break;
+	case ID_STEP_MESH:
+		glPushMatrix();
+		glRotated(m_spinAngle / 3, 0, 1, 0);
+
+		glPushMatrix();
+		glTranslated(0, 4, 0);
+		m_mesh.Draw();
+		glPopMatrix();
+
+		m_surface.Draw();
+
+		glPopMatrix();
 		break;
 	default:
 		glPushMatrix();
@@ -259,3 +340,12 @@ void CChildView::OnStepSquare()
 	m_scene = -1;
 	Invalidate();
 }
+
+
+void CChildView::OnStepMesh()
+{
+	m_scene = ID_STEP_MESH;
+	Invalidate();
+}
+
+

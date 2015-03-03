@@ -8,6 +8,7 @@
 #include "graphics/GrTexture.h"
 #include "graphics/GrCamera.h"
 #include "Sphere.h"
+#include "Mesh.h"
 
 // CChildView window
 
@@ -40,6 +41,8 @@ public:
 	CGrTexture m_wood;
 	CGrTexture m_worldmap;
 	double m_spinAngle;
+	CMesh m_mesh;
+	CMesh m_surface;
 	UINT_PTR m_spinTimer;
 	CSphere m_sphere;
 	afx_msg void OnStepSpin();
@@ -51,5 +54,7 @@ public:
 	int m_scene;
 	afx_msg void OnStepSphere();
 	afx_msg void OnStepSquare();
+	afx_msg void OnStepMesh();
+	void CChildView::CreateMesh();
 };
 
