@@ -26,6 +26,8 @@ m_camera.Set(20, 10, 50, 0, 0, 0, 0, 1, 0);
 m_scene = -1;
 m_sphere.SetTexture(&m_worldmap);
 CreateMesh();
+m_spinLightAngle = 0;
+m_SpinLightTimer = 0;
 }
 
 CChildView::~CChildView()
@@ -43,6 +45,7 @@ BEGIN_MESSAGE_MAP(CChildView, COpenGLWnd)
 	ON_COMMAND(ID_STEP_SPHERE, &CChildView::OnStepSphere)
 	ON_COMMAND(ID_STEP_SQUARE, &CChildView::OnStepSquare)
 	ON_COMMAND(ID_STEP_MESH, &CChildView::OnStepMesh)
+	ON_COMMAND(ID_STEP_SPINLIGHT, &CChildView::OnStepSpinlight)
 END_MESSAGE_MAP()
 
 
@@ -160,9 +163,13 @@ void CChildView::OnGLDraw(CDC* pDC)
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 
+	glPushMatrix();
+	glRotated(m_spinLightAngle, 0., 1.0, 0.);
+
+
 	GLfloat lightpos[] = { 0.5, 2.0, 1.0, 0. };
 	glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
-
+	glPopMatrix();
 	//GLfloat msugreen[] = { 0.f, .47f, .2f, 1.f };
 	GLfloat white[] = { 1.f, 1.f, 1.f, 1.f };
 	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, white);
@@ -294,10 +301,37 @@ void CChildView::OnStepSpin()
 	}
 }
 
+
+
+void CChildView::OnStepSpinlight()
+{
+	if (m_SpinLightTimer == 0)
+	{
+		// Create the timer
+		m_SpinLightTimer = SetTimer(2, 30, NULL);
+	}
+	else
+	{
+		// Destroy the timer
+		KillTimer(m_SpinLightTimer);
+		m_SpinLightTimer = 0;
+	}
+}
+
 void CChildView::OnTimer(UINT_PTR nIDEvent)
 {
-	m_spinAngle += 5;       // 5 degrees every 30ms about
-	Invalidate();
+	if (nIDEvent == 1)
+	{
+		m_spinAngle += 5;       // 5 degrees every 30ms about
+		Invalidate();
+	}
+
+	if (nIDEvent == 2) 
+	{
+		m_spinLightAngle += 5;       // 5 degrees every 30ms about
+
+		Invalidate();
+	}
 
 	COpenGLWnd::OnTimer(nIDEvent);
 }
@@ -349,5 +383,6 @@ void CChildView::OnStepMesh()
 	m_scene = ID_STEP_MESH;
 	Invalidate();
 }
+
 
 

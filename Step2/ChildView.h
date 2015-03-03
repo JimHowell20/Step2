@@ -41,10 +41,12 @@ public:
 	CGrTexture m_wood;
 	CGrTexture m_worldmap;
 	double m_spinAngle;
+	double m_spinLightAngle;
 	CMesh m_mesh;
 	CMesh m_surface;
 	CMesh m_fish;
 	UINT_PTR m_spinTimer;
+	UINT_PTR m_SpinLightTimer;
 	CSphere m_sphere;
 	afx_msg void OnStepSpin();
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
@@ -57,5 +59,6 @@ public:
 	afx_msg void OnStepSquare();
 	afx_msg void OnStepMesh();
 	void CChildView::CreateMesh();
+	afx_msg void OnStepSpinlight();
 };
 
