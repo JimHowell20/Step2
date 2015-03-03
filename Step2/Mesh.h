@@ -2,7 +2,9 @@
 
 #include <vector>
 
+#include "graphics\GrTexture.h"
 #include "graphics/GrVector.h"
+#include "gl/gl.h"
 
 class CMesh
 {
@@ -19,6 +21,7 @@ public:
 	void CMesh::AddFlatQuad(int a, int b, int c, int d, int n);
 	void CMesh::AddQuad(int a, int b, int c, int d);
 	void CMesh::LoadOBJ(const char *filename);
+	void loadTexture(LPCTSTR filename);
 
 private:
 	std::vector<CGrVector> m_vertices;
@@ -36,4 +39,8 @@ private:
 	typedef std::vector<TV> Triangles;
 	typedef Triangles::iterator PTV;
 	Triangles       m_triangles;
+
+	bool textureIsLoaded;
+	CGrTexture m_texture;
+	
 };

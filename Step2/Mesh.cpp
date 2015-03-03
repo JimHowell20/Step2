@@ -8,6 +8,7 @@ using namespace std;
 
 CMesh::CMesh(void)
 {
+	textureIsLoaded = false;
 }
 
 
@@ -18,13 +19,33 @@ CMesh::~CMesh(void)
 
 void CMesh::Draw()
 {
+	if (textureIsLoaded)
+	{
+		glEnable(GL_TEXTURE_2D);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		glBindTexture(GL_TEXTURE_2D, m_texture.TexName());
+	}
+
 	glBegin(GL_TRIANGLES);
 	for (PTV v = m_triangles.begin(); v != m_triangles.end(); v++)
 	{
-		glNormal3dv(m_normals[v->n]);
-		glVertex3dv(m_vertices[v->v]);
+		if (textureIsLoaded)
+		{
+			glNormal3dv(m_normals[v->n]);
+			glTexCoord2dv(m_tvertices[v->t]);
+			glVertex3dv(m_vertices[v->v]);
+		}
+		else
+		{
+			glNormal3dv(m_normals[v->n]);
+			glVertex3dv(m_vertices[v->v]);
+		}
 	}
 	glEnd();
+
+
+	if (textureIsLoaded)
+		glDisable(GL_TEXTURE_2D);
 }
 
 void CMesh::AddTriangleVertex(int v, int n, int t)
@@ -122,4 +143,10 @@ void CMesh::LoadOBJ(const char *filename)
 
 	}
 
+}
+
+void CMesh::loadTexture(LPCTSTR filename)
+{
+	m_texture.LoadFile(filename);
+	textureIsLoaded = true;
 }

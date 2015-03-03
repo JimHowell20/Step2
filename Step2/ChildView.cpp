@@ -135,6 +135,7 @@ void CChildView::CreateMesh()
 		}
 	}
 	m_fish.LoadOBJ("models\\fish4.obj");
+	m_fish.loadTexture(L"models/BLUEGILL.bmp");
 }
 
 
@@ -209,27 +210,31 @@ void CChildView::OnGLDraw(CDC* pDC)
 		glRotated(m_spinAngle / 3, 0, 1, 0);
 
 		glPushMatrix();
-		m_fish.Draw();
-		glTranslated(0, 4, 0);
+		glTranslated(3, 0, 0);
 		m_mesh.Draw();
 		glPopMatrix();
 
 		m_surface.Draw();
 
+		glPushMatrix();
+		glTranslated(0, -5, 1);
+		glRotated(270, 1., 0., 0.);
+		m_fish.Draw();
+		glPopMatrix();
+
 		glPopMatrix();
 		break;
-
 	case ID_STEP_TWOTORI:
 		glPushMatrix();
 		glRotated(m_spinAngle / 3, 0, 1, 0);
-		glTranslated(5, 4, 0);
+		glTranslated(5, 5, 0);
 		glRotated(-45, 1., 0., 0.);
 		m_torus1.Draw();
 		glPopMatrix();
 
 		glPushMatrix();
 		glRotated(m_spinAngle / 3, 0, 1, 0);
-		glTranslated(0, 4, 0);
+		glTranslated(0, 5, 0);
 		glRotated(45, 1., 0., 0.);
 		m_torus2.Draw();
 		glPopMatrix();
