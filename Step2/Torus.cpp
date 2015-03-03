@@ -52,6 +52,13 @@ void CTorus::Draw()
     double a1a = 0;
     double a1b = step1r;
 
+	if (m_texture != NULL)
+	{
+		glEnable(GL_TEXTURE_2D);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		glBindTexture(GL_TEXTURE_2D, m_texture->TexName());
+	}
+
     for(int s=0;  s<m_steps1;  s++, a1a = a1b, a1b += step1r)
     {
         // We build a slice out of quadrilaterals that range from 
@@ -67,21 +74,25 @@ void CTorus::Draw()
 
             glBegin(GL_QUADS);
             TorusVertex(a1a, m_r1, a2a, m_r2, v, n);
+			glTexCoord2d(a1a, a2a / (2 * GR_PI));
             glNormal3dv(n);
 
             glVertex3dv(v);
 
             TorusVertex(a1b, m_r1, a2a, m_r2, v, n);
+			glTexCoord2d(a1b, a2a / (2 * GR_PI));
             glNormal3dv(n);
 
             glVertex3dv(v);
 
             TorusVertex(a1b, m_r1, a2b, m_r2, v, n);
+			glTexCoord2d(a1b, a2b / (2 * GR_PI));
             glNormal3dv(n);
 
             glVertex3dv(v);
 
             TorusVertex(a1a, m_r1, a2b, m_r2, v, n);
+			glTexCoord2d(a1a, a2b / (2 * GR_PI));
             glNormal3dv(n);
 
             glVertex3dv(v);
@@ -89,6 +100,8 @@ void CTorus::Draw()
             glEnd();
         }
     }
+
+	glDisable(GL_TEXTURE_2D);
 }
 
 

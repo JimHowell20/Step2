@@ -20,11 +20,15 @@ CChildView::CChildView()
 {
 m_wood.LoadFile(L"textures/plank01.bmp");
 m_worldmap.LoadFile(L"textures/worldmap.bmp");
+m_marble1.LoadFile(L"textures/marble10.bmp");
+m_marble2.LoadFile(L"textures/marble03.bmp");
 m_spinAngle = 0;
 m_spinTimer = 0;
 m_camera.Set(20, 10, 50, 0, 0, 0, 0, 1, 0);
 m_scene = -1;
 m_sphere.SetTexture(&m_worldmap);
+m_torus1.SetTexture(&m_marble1);
+m_torus2.SetTexture(&m_marble2);
 CreateMesh();
 m_spinLightAngle = 0;
 m_SpinLightTimer = 0;
@@ -46,6 +50,7 @@ BEGIN_MESSAGE_MAP(CChildView, COpenGLWnd)
 	ON_COMMAND(ID_STEP_SQUARE, &CChildView::OnStepSquare)
 	ON_COMMAND(ID_STEP_MESH, &CChildView::OnStepMesh)
 	ON_COMMAND(ID_STEP_SPINLIGHT, &CChildView::OnStepSpinlight)
+	ON_COMMAND(ID_STEP_TWOTORI, &CChildView::OnStepTwotori)
 END_MESSAGE_MAP()
 
 
@@ -195,6 +200,8 @@ void CChildView::OnGLDraw(CDC* pDC)
 
 	switch (m_scene) {
 	case ID_STEP_SPHERE:
+		glPushMatrix();
+		glRotated(m_spinAngle / 3, 0, 1, 0);
 		m_sphere.Draw();
 		break;
 	case ID_STEP_MESH:
@@ -210,6 +217,23 @@ void CChildView::OnGLDraw(CDC* pDC)
 		m_surface.Draw();
 
 		glPopMatrix();
+		break;
+
+	case ID_STEP_TWOTORI:
+		glPushMatrix();
+		glRotated(m_spinAngle / 3, 0, 1, 0);
+		glTranslated(5, 4, 0);
+		glRotated(-45, 1., 0., 0.);
+		m_torus1.Draw();
+		glPopMatrix();
+
+		glPushMatrix();
+		glRotated(m_spinAngle / 3, 0, 1, 0);
+		glTranslated(0, 4, 0);
+		glRotated(45, 1., 0., 0.);
+		m_torus2.Draw();
+		glPopMatrix();
+
 		break;
 	default:
 		glPushMatrix();
@@ -386,3 +410,8 @@ void CChildView::OnStepMesh()
 
 
 
+void CChildView::OnStepTwotori()
+{
+	m_scene = ID_STEP_TWOTORI;
+	Invalidate();
+}

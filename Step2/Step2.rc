@@ -127,6 +127,8 @@ BEGIN
         MENUITEM "Sphere",                      ID_STEP_SPHERE
         MENUITEM "Square",                      ID_STEP_SQUARE
         MENUITEM "Mesh",                        ID_STEP_MESH
+        MENUITEM "SpinLight",                   ID_STEP_SPINLIGHT
+        MENUITEM "TwoTori",                     ID_STEP_TWOTORI
     END
 END
 

@@ -9,6 +9,7 @@
 #include "graphics/GrCamera.h"
 #include "Sphere.h"
 #include "Mesh.h"
+#include "Torus.h"
 
 // CChildView window
 
@@ -47,6 +48,10 @@ public:
 	CMesh m_fish;
 	UINT_PTR m_spinTimer;
 	UINT_PTR m_SpinLightTimer;
+	CTorus m_torus1;
+	CTorus m_torus2;
+	CGrTexture m_marble1;
+	CGrTexture m_marble2;
 	CSphere m_sphere;
 	afx_msg void OnStepSpin();
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
@@ -60,5 +65,6 @@ public:
 	afx_msg void OnStepMesh();
 	void CChildView::CreateMesh();
 	afx_msg void OnStepSpinlight();
+	afx_msg void OnStepTwotori();
 };
 
