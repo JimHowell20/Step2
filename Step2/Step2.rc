@@ -124,6 +124,8 @@ BEGIN
     POPUP "Step"
     BEGIN
         MENUITEM "Spin",                        ID_STEP_SPIN
+        MENUITEM "Sphere",                      ID_STEP_SPHERE
+        MENUITEM "Square",                      ID_STEP_SQUARE
     END
 END
 

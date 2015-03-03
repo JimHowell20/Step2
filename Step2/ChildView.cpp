@@ -16,11 +16,15 @@
 CChildView::CChildView()
 	: m_spinAngle(0)
 	, m_spinTimer(0)
+	, m_scene(0)
 {
 m_wood.LoadFile(L"textures/plank01.bmp");
+m_worldmap.LoadFile(L"textures/worldmap.bmp");
 m_spinAngle = 0;
 m_spinTimer = 0;
 m_camera.Set(20, 10, 50, 0, 0, 0, 0, 1, 0);
+m_scene = -1;
+m_sphere.SetTexture(&m_worldmap);
 }
 
 CChildView::~CChildView()
@@ -35,6 +39,8 @@ BEGIN_MESSAGE_MAP(CChildView, COpenGLWnd)
 	ON_WM_MOUSEMOVE()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_RBUTTONDOWN()
+	ON_COMMAND(ID_STEP_SPHERE, &CChildView::OnStepSphere)
+	ON_COMMAND(ID_STEP_SQUARE, &CChildView::OnStepSquare)
 END_MESSAGE_MAP()
 
 
@@ -110,12 +116,19 @@ void CChildView::OnGLDraw(CDC* pDC)
 	//
 
 	const double RED[] = { 0.7, 0.0, 0.0 };
-	glPushMatrix();
-	glTranslated(1.5, 1.5, 1.5);
-	glRotated(m_spinAngle, 0., 0., 1.);
-	glTranslated(-1.5, -1.5, -1.5);
-	Box(3., 3., 3., RED);
-	glPopMatrix();
+
+	switch (m_scene) {
+	case ID_STEP_SPHERE:
+		m_sphere.Draw();
+		break;
+	default:
+		glPushMatrix();
+		glTranslated(1.5, 1.5, 1.5);
+		glRotated(m_spinAngle, 0., 0., 1.);
+		glTranslated(-1.5, -1.5, -1.5);
+		Box(3., 3., 3., RED);
+		glPopMatrix();
+	}
 }
 
 //
@@ -231,4 +244,18 @@ void CChildView::OnRButtonDown(UINT nFlags, CPoint point)
 	m_camera.MouseDown(point.x, point.y, 2);
 
 	COpenGLWnd::OnRButtonDown(nFlags, point);
+}
+
+
+void CChildView::OnStepSphere()
+{
+	m_scene = ID_STEP_SPHERE;
+	Invalidate();
+}
+
+
+void CChildView::OnStepSquare()
+{
+	m_scene = -1;
+	Invalidate();
 }

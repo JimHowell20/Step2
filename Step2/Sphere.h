@@ -19,5 +19,6 @@ private:
 
     double m_radius;
 	CGrTexture *m_texture;
+	CGrTexture *m_worldmap;
 };
 
